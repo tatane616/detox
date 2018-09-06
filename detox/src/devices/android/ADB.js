@@ -6,8 +6,8 @@ const EmulatorTelnet = require('./EmulatorTelnet');
 const Environment = require('../../utils/environment');
 
 class ADB {
-  constructor() {
-    this.adbBin = path.join(Environment.getAndroidSDKPath(), 'platform-tools', 'adb');
+  constructor({ adbBin } = {}) {
+    this.adbBin = adbBin || path.join(Environment.getAndroidSDKPath(), 'platform-tools', 'adb');
   }
 
   async devices() {
@@ -110,7 +110,7 @@ class ADB {
   }
 
   async pidof(deviceId, bundleId) {
-    const bundleIdRegex = pipeCommands.escape.inQuotedRegexp(bundleId) + '[ ]*$';
+    const bundleIdRegex = pipeCommands.escape.inQuotedRegexp(bundleId) + '[ ]*\\\\r\\\\?$';
     const grep = pipeCommands.search.regexp;
 
     const processes = await this.shell(deviceId, `ps | ${grep(bundleIdRegex)}`).catch(() => '');

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ "$OSTYPE" == "win32" ]]; then
+    type $1
+else
+    cat $1
+fi
